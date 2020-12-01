@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeng.ssm.dao.MaterialDao">
+    <resultMap id="BaseResultMap" type="com.zeng.ssm.model.Material">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="description" jdbcType="VARCHAR" property="description" />
+        <result column="type" jdbcType="VARCHAR" property="type" />
+        <result column="origin" jdbcType="VARCHAR" property="origin" />
+        <result column="source" jdbcType="VARCHAR" property="source"/>
+        <collection column="id" property="materialLoadList" ofType="com.zeng.ssm.model.MaterialLoad"
+                    javaType="java.util.ArrayList" select="com.zeng.ssm.dao.MaterialLoadDao.selectMaterialLoadListByMaterialId"/>
+    </resultMap>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT * from `material` where id = #{pk}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * from `material`
+    </select>
+
+    <select id="selectByMaterialName" resultMap="BaseResultMap">
+        SELECT * from `material` where title = #{materialName};
+    </select>
+
+<!--    <select id="selectByPage" parameterType="int" resultMap="BaseResultMap">-->
+<!--        SELECT * from `material` limit #{page},#{size}-->
+<!--    </select>-->
+
+    <select id="selectByContent" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <if test="content != null">
+            SELECT * from `material` where `title` like '%${content}%' or `description` like '%${content}%' or `type` like '%${content}%'
+            or `origin` like '%${content}%' or `source` like '%${content}%';
+        </if>
+    </select>
+
+    <select id="selectRepeatItem" resultMap="BaseResultMap" parameterType="com.zeng.ssm.model.Material">
+        SELECT * from `material` where title = #{title} and description = #{description} and type = #{type} and origin = #{origin}
+    </select>
+
+    <insert id="insert" parameterType="com.zeng.ssm.model.Material" useGeneratedKeys="true" keyProperty="id" >
+        insert into material (`title`, `description`, `type`, `origin`, `source`)
+        values (#{title,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, #{type,jdbcType=VARCHAR}, #{origin,jdbcType=VARCHAR}, #{source,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.zeng.ssm.model.Material">
+        update `material`
+        set
+          `title` = #{title,jdbcType=VARCHAR},
+          `description` = #{description,jdbcType=VARCHAR},
+          `type` = #{type,jdbcType=VARCHAR},
+          `origin` = #{origin,jdbcType=VARCHAR},
+          `source` = #{source,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+      delete from `material` where id = #{pk,jdbcType=INTEGER}
+    </delete>
+
+</mapper>

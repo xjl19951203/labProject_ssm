@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeng.ssm.dao.UserDao">
+    <resultMap id="SimpleResultMap" type="com.zeng.ssm.model.User">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="createdAt" jdbcType="TIMESTAMP" property="createdAt" />
+        <result column="updatedAt" jdbcType="TIMESTAMP" property="updatedAt" />
+    </resultMap>
+
+    <resultMap id="BaseResultMap" type="com.zeng.ssm.model.User">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="userName" jdbcType="VARCHAR" property="userName" />
+        <result column="email" jdbcType="VARCHAR" property="email" />
+        <result column="createdAt" jdbcType="TIMESTAMP" property="createdAt" />
+        <result column="updatedAt" jdbcType="TIMESTAMP" property="updatedAt" />
+<!--        <collection column="id" property="ownGroups" ofType="com.zeng.ssm.model.UserGroup"-->
+<!--                    javaType="java.util.ArrayList" select="com.zeng.ssm.dao.UserGroupDao.selectListByUserId"/>-->
+<!--        <collection column="id" property="joinGroups" ofType="com.zeng.ssm.model.UserGroupData"-->
+<!--                    javaType="java.util.ArrayList" select="com.zeng.ssm.dao.UserGroupDataDao.selectListByUserId"/>-->
+    </resultMap>
+
+    <select id="selectAll" resultMap="SimpleResultMap">
+        SELECT * from `user`
+    </select>
+
+    <!--传入的User对象可以直接用其属性，不用在userName上加record.userName-->
+    <select id="selectByRegister" resultMap="SimpleResultMap">
+        SELECT * from `user` where userName = #{userName,jdbcType=VARCHAR} or email = #{email,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByLogin" resultType="com.zeng.ssm.model.User">
+        SELECT * from `user` where email = #{email,jdbcType=VARCHAR} and password = #{password,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT * from `user` where id = #{pk}
+    </select>
+
+    <select id="selectByUserName" parameterType = "java.lang.String" resultMap="SimpleResultMap">
+        SELECT * from `user` where userName = #{userName}
+    </select>
+
+    <insert id="insert" parameterType="com.zeng.ssm.model.User" useGeneratedKeys="true" keyProperty="id">
+        insert into `user` (userName, `email`, `password`)
+        values (#{userName,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.zeng.ssm.model.User">
+        update `user`
+        set id = #{id,jdbcType=INTEGER},
+          title = #{title,jdbcType=VARCHAR},
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+<!--    <select id="selectByContent" parameterType="java.lang.String" resultMap="SimpleResultMap">-->
+<!--        SELECT * from `user`-->
+<!--        <if test="content != null">-->
+<!--            where username like '%${content}%' or email like '%${content}%'-->
+<!--        </if>-->
+<!--        ;-->
+<!--    </select>-->
+</mapper>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeng.ssm.dao.DeviceDataDao">
+    <resultMap id="BaseResultMap" type="com.zeng.ssm.model.DeviceData">
+        <id column="id" jdbcType="INTEGER" property="id" />
+<!--        <result column="sceneDataId" jdbcType="INTEGER" property="sceneDataId" />-->
+        <result column="inputFrameDataId" jdbcType="INTEGER" property="inputFrameDataId" />
+        <result column="workTime" jdbcType="FLOAT" property="workTime" />
+        <result column="deviceId" jdbcType="INTEGER" property="deviceId" />
+        <result column="createdAt" jdbcType="TIMESTAMP" property="createdAt" />
+        <result column="updatedAt" jdbcType="TIMESTAMP" property="updatedAt" />
+        <association property="device" column="deviceId" select="com.zeng.ssm.dao.DeviceDao.selectByPrimaryKey"/>
+<!--        <association property="sceneData" column="sceneDataId" select="com.zeng.ssm.dao.SceneDataDao.selectSimpleByPrimaryKey"/>-->
+    </resultMap>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT * from `device_data` where id = #{pk}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * from `device_data`
+    </select>
+
+    <select id="selectDeviceDataListByInputFrameDataId" resultMap="BaseResultMap">
+        select * from `device_data` where inputFrameDataId = #{pk}
+    </select>
+
+    <insert id="insert" parameterType="com.zeng.ssm.model.DeviceData" useGeneratedKeys="true" keyProperty="id" >
+        insert into `device_data` (`inputFrameDataId`, `workTime`, `deviceId`)
+        values (#{inputFrameDataId,jdbcType=INTEGER}, #{workTime,jdbcType=FLOAT}, #{deviceId,jdbcType=INTEGER})
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.zeng.ssm.model.DeviceData">
+        update `device_data`
+        set
+          `inputFrameDataId` = #{inputFrameDataId,jdbcType=INTEGER},
+          `workTime` = #{workTime,jdbcType=FLOAT},
+          `deviceId` = #{deviceId,jdbcType=INTEGER},
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+      delete from `device_data` where id = #{pk}
+    </delete>
+
+</mapper>

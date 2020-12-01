@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeng.ssm.dao.EnvLoadDataDao">
+    <resultMap id="BaseResultMap" type="com.zeng.ssm.model.EnvLoadData">
+        <id column="id" jdbcType="INTEGER" property="id" />
+<!--        <result column="sceneDataId" jdbcType="INTEGER" property="sceneDataId" />-->
+        <result column="outputFrameDataId" jdbcType="INTEGER" property="outputFrameDataId" />
+        <result column="envLoadId" jdbcType="INTEGER" property="envLoadId" />
+        <result column="value" jdbcType="FLOAT" property="value" />
+        <result column="unitId" jdbcType="INTEGER" property="unitId" />
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="deviceId" jdbcType="INTEGER" property="deviceId" />
+        <result column="collectReasonId" jdbcType="INTEGER" property="collectReasonId" />
+        <result column="monitorRangeId" jdbcType="INTEGER" property="monitorRangeId" />
+        <result column="frequency" jdbcType="VARCHAR" property="frequency"/>
+        <result column="location" jdbcType="VARCHAR" property="location"/>
+        <result column="collectMethodId" jdbcType="INTEGER" property="collectMethodId" />
+        <result column="time" jdbcType="VARCHAR" property="time"/>
+        <result column="reliability" jdbcType="VARCHAR" property="reliability" />
+        <result column="calculateMethodId" jdbcType="INTEGER" property="calculateMethodId" />
+        <result column="treatment" jdbcType="VARCHAR" property="treatment"/>
+        <result column="monitorMethodId" jdbcType="INTEGER" property="monitorMethodId" />
+        <result column="collectProblemId" jdbcType="INTEGER" property="collectProblemId" />
+        <result column="dataSourceId" jdbcType="INTEGER" property="dataSourceId" />
+        <result column="createdAt" jdbcType="TIMESTAMP" property="createdAt" />
+        <result column="updatedAt" jdbcType="TIMESTAMP" property="updatedAt" />
+
+<!--        <association property="sceneData" column="sceneDataId" select="com.zeng.ssm.dao.SceneDataDao.selectSimpleByPrimaryKey"/>-->
+        <association property="envLoad" column="envLoadId" select="com.zeng.ssm.dao.EnvLoadDao.selectByPrimaryKey"/>
+        <association property="unit" column="unitId" select="com.zeng.ssm.dao.UnitDao.selectByPrimaryKey"/>
+        <association property="device" column="deviceId" select="com.zeng.ssm.dao.DeviceDao.selectByPrimaryKey"/>
+        <association property="collectReason" column="collectReasonId" select="com.zeng.ssm.dao.CollectReasonDao.selectByPrimaryKey"/>
+        <association property="monitorRange" column="monitorRangeId" select="com.zeng.ssm.dao.MonitorRangeDao.selectByPrimaryKey"/>
+        <association property="collectMethod" column="collectMethodId" select="com.zeng.ssm.dao.CollectMethodDao.selectByPrimaryKey"/>
+        <association property="calculateMethod" column="calculateMethodId" select="com.zeng.ssm.dao.CalculateMethodDao.selectByPrimaryKey"/>
+        <association property="monitorMethod" column="monitorMethodId" select="com.zeng.ssm.dao.MonitorMethodDao.selectByPrimaryKey"/>
+        <association property="collectProblem" column="collectProblemId" select="com.zeng.ssm.dao.CollectProblemDao.selectByPrimaryKey"/>
+        <association property="dataSource" column="dataSourceId" select="com.zeng.ssm.dao.DataSourceDao.selectByPrimaryKey"/>
+
+    </resultMap>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        SELECT * from `env_load_data` where id = #{pk}
+    </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * from `env_load_data`
+    </select>
+
+    <select id="selectEnvLoadDataListByOutputFrameDataId" resultMap="BaseResultMap">
+        select * from `env_load_data` where outputFrameDataId = #{pk}
+    </select>
+
+    <insert id="insert" parameterType="com.zeng.ssm.model.EnvLoadData" useGeneratedKeys="true" keyProperty="id" >
+        insert into `env_load_data` (`outputFrameDataId`, `envLoadId`, `value`, `unitId`, `description`, `deviceId`, `collectReasonId`
+                    , `monitorRangeId`, `frequency`, `location`, `collectMethodId`, `time`, `reliability`, `calculateMethodId`, `treatment`
+                    , `monitorMethodId`, `collectProblemId`, `dataSourceId`)
+        values (#{outputFrameDataId,jdbcType=INTEGER}, #{envLoadId,jdbcType=INTEGER}, #{value,jdbcType=FLOAT}
+                , #{unitId,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{deviceId,jdbcType=INTEGER}, #{collectReasonId,jdbcType=INTEGER}
+                , #{monitorRangeId,jdbcType=INTEGER},#{frequency,jdbcType=VARCHAR},#{location,jdbcType=VARCHAR},#{collectMethodId,jdbcType=INTEGER}
+                , #{time,jdbcType=VARCHAR}, #{reliability,jdbcType=VARCHAR}, #{calculateMethodId,jdbcType=INTEGER}, #{treatment,jdbcType=VARCHAR}
+                , #{monitorMethodId,jdbcType=INTEGER}, #{collectProblemId,jdbcType=INTEGER}, #{dataSourceId,jdbcType=INTEGER})
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.zeng.ssm.model.EnvLoadData">
+        update `env_load_data`
+        set
+          `outputFrameDataId` = #{outputFrameDataId,jdbcType=INTEGER},
+          `envLoadId` = #{envLoadId,jdbcType=INTEGER},
+          `value` = #{value,jdbcType=FLOAT},
+          `unitId` = #{unitId,jdbcType=INTEGER},
+          `description` = #{description,jdbcType=VARCHAR},
+          `deviceId` = #{deviceId,jdbcType=INTEGER},
+          `collectReasonId` = #{collectReasonId,jdbcType=INTEGER},
+          `monitorRangeId` = #{monitorRangeId,jdbcType=INTEGER},
+          `frequency` = #{frequency,jdbcType=VARCHAR},
+          `location` = #{location,jdbcType=VARCHAR},
+          `collectMethodId` = #{collectMethodId,jdbcType=INTEGER},
+          `time` = #{time,jdbcType=VARCHAR},
+          `reliability` = #{reliability,jdbcType=VARCHAR},
+          `calculateMethodId` = #{calculateMethodId,jdbcType=INTEGER},
+          `treatment` = #{treatment,jdbcType=VARCHAR},
+          `monitorMethodId` = #{monitorMethodId,jdbcType=INTEGER},
+          `collectProblemId` = #{collectProblemId,jdbcType=INTEGER},
+          `dataSourceId` = #{dataSourceId,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+      delete from `env_load_data` where id = #{pk,jdbcType=INTEGER}
+    </delete>
+
+</mapper>

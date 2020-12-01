@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zeng.ssm.dao.EnergyDao">
+    <resultMap id="BaseResultMap" type="com.zeng.ssm.model.Energy">
+        <id column="id" jdbcType="INTEGER" property="id" />
+        <result column="title" jdbcType="VARCHAR" property="title" />
+        <result column="energyCategoryId" jdbcType="INTEGER" property="energyCategoryId"/>
+        <result column="source" jdbcType="VARCHAR" property="source"/>
+        <association property="energyCategory" column="energyCategoryId" select="com.zeng.ssm.dao.EnergyCategoryDao.selectByPrimaryKey"/>
+    </resultMap>
+
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap">
+        SELECT * from `energy` where id = #{pk}
+    </select>
+
+<!--    <select id="selectByPage" parameterType="int" resultMap="BaseResultMap">-->
+<!--        SELECT * from `energy` limit #{page},#{size}-->
+<!--    </select>-->
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        SELECT * from `energy`
+    </select>
+
+    <select id="selectByContent" parameterType="java.lang.String" resultMap="BaseResultMap">
+        <if test="content != null">
+            SELECT * from `energy` where title like '%${content}%' or `source` like '%${content}%';
+        </if>
+    </select>
+
+    <select id="selectByEnergyName" resultType="com.zeng.ssm.model.Energy">
+        select * from `energy` where title = #{energyName}
+    </select>
+
+    <select id="selectRepeatItem" resultMap="BaseResultMap" parameterType="com.zeng.ssm.model.Energy">
+        SELECT * from `energy` where title = #{title} and energyCategoryId = #{energyCategoryId}
+    </select>
+
+    <insert id="insert" parameterType="com.zeng.ssm.model.Energy" useGeneratedKeys="true" keyProperty="id" >
+        insert into `energy` ( `title`, `energyCategoryId`, `source`)
+        values (#{title,jdbcType=VARCHAR}, #{energyCategoryId,jdbcType=INTEGER}, #{source,jdbcType=VARCHAR})
+    </insert>
+
+    <update id="updateByPrimaryKey" parameterType="com.zeng.ssm.model.Energy">
+        update `energy`
+        set
+          `title` = #{title,jdbcType=VARCHAR},
+          `energyCategoryId` = #{energyCategoryId,jdbcType=INTEGER},
+          `source` = #{source,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+      delete from `energy` where id = #{pk,jdbcType=INTEGER}
+    </delete>
+</mapper>
