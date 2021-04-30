@@ -29,7 +29,6 @@ public class SystemController {
      */
     @RequestMapping("/categories/tree")
     public List<Category> getTree() {
-        System.out.println("1");
         return this.categoryDao.selectCategoryTree();
     }
 
@@ -38,7 +37,6 @@ public class SystemController {
      */
     @RequestMapping("/all")
     public HashMap<String, List<AbstractModel>> getAll () {
-        System.out.println("1");
         return ModelHandler.getAllTableData();
     }
 
@@ -48,7 +46,6 @@ public class SystemController {
      */
     @RequestMapping("/tables")
     public HashMap<String, AbstractModel> getSystemTable () {
-        System.out.println("2");
         HashMap<String, AbstractModel> map = new HashMap<>();
         for (AbstractModel model : this.systemTableDataDao.selectAll()) {
             SystemTableData tableData = (SystemTableData) model;
